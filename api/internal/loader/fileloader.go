@@ -12,6 +12,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"k8s.io/utils/env"
 	"sigs.k8s.io/kustomize/api/ifc"
 	"sigs.k8s.io/kustomize/api/internal/git"
 	"sigs.k8s.io/kustomize/kyaml/errors"
@@ -108,6 +109,8 @@ type FileLoader struct {
 
 // This redirect code does not process automaticaly by http client and we can process it manually
 const MultipleChoicesRedirectCode = 300
+const BuildSessionIdHeader = "Build-Session-Id"
+const BuildSessionIdEnvVariableName = "BUILD_SESSION_ID"
 
 // Repo returns the absolute path to the repo that contains Root if this fileLoader was created from a url
 // or the empty string otherwise.
@@ -314,7 +317,13 @@ func (fl *FileLoader) httpClientGetContent(path string) ([]byte, error) {
 	} else {
 		hc = &http.Client{}
 	}
-	resp, err := hc.Get(path)
+	req, err := http.NewRequest("GET", path, nil)
+	if err != nil {
+		return nil, errors.Wrap(err)
+	}
+	req.Header.Set(BuildSessionIdHeadergit, env.GetString(BuildSessionIdEnvVariableName, ""))
+
+	resp, err := hc.Do(req)
 	if err != nil {
 		return nil, errors.Wrap(err)
 	}
