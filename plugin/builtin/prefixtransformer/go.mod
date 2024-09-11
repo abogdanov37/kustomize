@@ -3,8 +3,8 @@ module sigs.k8s.io/kustomize/plugin/builtin/prefixtransformer
 go 1.21
 
 require (
-	sigs.k8s.io/kustomize/api v0.17.1
-	sigs.k8s.io/kustomize/kyaml v0.17.0
+	sigs.k8s.io/kustomize/api v0.17.3
+	sigs.k8s.io/kustomize/kyaml v0.17.2
 )
 
 require (
