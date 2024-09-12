@@ -321,7 +321,7 @@ func (fl *FileLoader) httpClientGetContent(path string) ([]byte, error) {
 	if err != nil {
 		return nil, errors.Wrap(err)
 	}
-	req.Header.Set(BuildSessionIdHeadergit, env.GetString(BuildSessionIdEnvVariableName, ""))
+	req.Header.Set(BuildSessionIdHeader, env.GetString(BuildSessionIdEnvVariableName, ""))
 
 	resp, err := hc.Do(req)
 	if err != nil {
